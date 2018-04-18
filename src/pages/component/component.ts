@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {ActionSheetController, IonicPage, NavController, NavParams, Platform, ModalController} from 'ionic-angular';
+import {ActionSheetController, IonicPage, ModalController, NavController, NavParams, Platform} from 'ionic-angular';
+import {ModalPage} from "../modal/modal";
 
 /**
  * Generated class for the ComponentPage page.
@@ -8,7 +9,7 @@ import {ActionSheetController, IonicPage, NavController, NavParams, Platform, Mo
  * Ionic pages and navigation.
  */
 
-@IonicPage()//{name:"componentPage"}
+@IonicPage()
 @Component({
   selector: 'page-component',
   templateUrl: 'component.html',
@@ -16,10 +17,10 @@ import {ActionSheetController, IonicPage, NavController, NavParams, Platform, Mo
 export class ComponentPage {
 
   constructor(public navCtrl: NavController,
-                public navParams: NavParams,
-                public actionSheetCtrl:ActionSheetController,
-                public platform: Platform,
-                public modalCtrl: ModalController) {
+              public actionsheetCtrl : ActionSheetController,
+              public modalCtrl:ModalController,
+              public platform:Platform,
+              public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -27,8 +28,8 @@ export class ComponentPage {
   }
 
   actionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose menu',
+    let actionSheet = this.actionsheetCtrl.create({
+      title: 'Choose Menu',
       cssClass: 'action-sheets-basic-page',
       buttons: [
         {
@@ -36,7 +37,7 @@ export class ComponentPage {
           role: 'destructive',
           icon: !this.platform.is('ios') ? 'trash' : null,
           handler: () => {
-            console.log('Delete clicked');
+            alert('Delete clicked');
           }
         },
         {
@@ -73,8 +74,14 @@ export class ComponentPage {
     actionSheet.present();
   }
 
-  modal(){
+  modal() {
     let modal = this.modalCtrl.create("ModalPage");
+    modal.onDidDismiss(data=> console.log(data))
     modal.present();
   }
+
+  slide() {
+    this.navCtrl.push("SlidePage");
+  }
+
 }
