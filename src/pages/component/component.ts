@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
-import {ActionSheetController, IonicPage, ModalController, NavController, NavParams, Platform} from 'ionic-angular';
+import {Component} from '@angular/core';
+import {
+  ActionSheetController, AlertController, IonicPage, ModalController, NavController, NavParams,
+  Platform, ToastController
+} from 'ionic-angular';
 import {ModalPage} from "../modal/modal";
+import {AccountInterface} from "../../interfaces/account";
 
 /**
  * Generated class for the ComponentPage page.
@@ -15,11 +19,14 @@ import {ModalPage} from "../modal/modal";
   templateUrl: 'component.html',
 })
 export class ComponentPage {
+  private accountData = {} as AccountInterface
 
   constructor(public navCtrl: NavController,
-              public actionsheetCtrl : ActionSheetController,
-              public modalCtrl:ModalController,
-              public platform:Platform,
+              public actionsheetCtrl: ActionSheetController,
+              public modalCtrl: ModalController,
+              public alertCtrl: AlertController,
+              public toastCtrl: ToastController,
+              public platform: Platform,
               public navParams: NavParams) {
   }
 
@@ -76,12 +83,44 @@ export class ComponentPage {
 
   modal() {
     let modal = this.modalCtrl.create("ModalPage");
-    modal.onDidDismiss(data=> console.log(data))
+    modal.onDidDismiss(data => console.log(data))
     modal.present();
   }
 
   slide() {
     this.navCtrl.push("SlidePage");
+  }
+
+  promptAlert() {
+    let prompt = this.alertCtrl.create({
+      title: 'Login',
+      message: "이름과E-Mail를입력하세요",
+      inputs: [{name: 'name', placeholder: 'Name 입력' },{ name: 'email', placeholder: 'Email 입력'},],
+      buttons: [
+        {text: '취소', handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: '저장', handler: data => {
+            this.accountData = {name: data.name, email: data.email}
+            this.navCtrl.push('NavPage', {account: this.accountData});
+          }
+        }]
+    });
+    prompt.present();
+  }
+
+  toast() {
+    let toast = this.toastCtrl.create({
+      message: '3초 동안 보였다가 사라집니다.',
+      duration: 3000,
+      position  : 'top',
+      showCloseButton: true,
+      closeButtonText: 'Ok'
+    });
+    toast.onDidDismiss((data)=> console.log("toast 사라짐" + data));
+    toast.present();
   }
 
 }
